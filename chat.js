@@ -15,7 +15,11 @@ const askQuestion = (query) => {
   );
 };
 
-const ans = await askQuestion(
+const channel = process.env.CHANNEL_NAME ?? await askQuestion(
+  "Escribi el canal en el que queres copiar a alguien (en minúscula): ",
+);
+
+const copycat = await askQuestion(
   "Escribi el nombre de quien queres copiar (en minúscula): ",
 );
 
@@ -25,13 +29,13 @@ const client = new tmi.Client({
     username: process.env.BOT_USERNAME,
     password: process.env.OAUTH_TOKEN,
   },
-  channels: [process.env.CHANNEL_NAME],
+  channels: [channel],
 });
 
 client.connect();
 
 client.on("message", (channel, tags, message, self) => {
-  if (tags.username == ans) {
+  if (tags.username == copycat) {
     client.say(channel, `${message}`);
   }
 });
